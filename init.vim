@@ -9,6 +9,10 @@ Plug 'tpope/vim-sensible'
 Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/cscope.vim'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-compe'
+Plug 'ojroques/nvim-lspfuzzy'
 call plug#end()
 
 set noerrorbells
@@ -100,7 +104,7 @@ nnoremap <silent> <Leader>cf :call Cscope('7', expand('<cword>'))<CR>
 nnoremap <silent> <Leader>cg :call Cscope('1', expand('<cword>'))<CR>
 nnoremap <silent> <Leader>ci :call Cscope('8', expand('<cword>'))<CR>
 nnoremap <silent> <Leader>cs :call Cscope('0', expand('<cword>'))<CR>
-nnoremap <silent>  :call Cscope('0', expand('<cword>'))<CR>
+" nnoremap <silent>  :call Cscope('0', expand('<cword>'))<CR>
 nnoremap <silent> <Leader>ct :call Cscope('4', expand('<cword>'))<CR>
 
 nnoremap <silent> <Leader><Leader>ca :call CscopeQuery('0')<CR>
@@ -116,3 +120,58 @@ nnoremap <silent> <Leader><Leader>ct :call CscopeQuery('9')<CR>
 
 " startify customizations
 let g:startify_change_to_dir=0
+
+
+" nvim-compe customizations
+let g:compe = {}
+let g:compe.enabled = v:true
+let g:compe.autocomplete = v:true
+let g:compe.debug = v:false
+let g:compe.min_length = 3
+let g:compe.preselect = 'enable'
+let g:compe.throttle_time = 80
+let g:compe.source_timeout = 200
+let g:compe.incomplete_delay = 400
+let g:compe.max_abbr_width = 100
+let g:compe.max_kind_width = 100
+let g:compe.max_menu_width = 100
+let g:compe.documentation = v:true
+
+let g:compe.source = {}
+let g:compe.source.path = v:true
+let g:compe.source.buffer = v:true
+let g:compe.source.calc = v:true
+let g:compe.source.nvim_lsp = v:true
+let g:compe.source.nvim_lua = v:true
+let g:compe.source.vsnip = v:true
+
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+" lsp customizations
+
+lua << EOF
+require('lspfuzzy').setup {}
+require'lspconfig'.clangd.setup {
+
+    on_attach = function (client, buffnr)
+        print ("skm: clangd started....", buffnr );
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
+    end
+}
+require'lspconfig'.gopls.setup{
+    on_attach = function (client, buffnr)
+        print ("skm: gopls started....", buffnr );
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
+    end
+}
+EOF
