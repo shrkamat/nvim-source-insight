@@ -13,6 +13,9 @@ Plug 'vim-scripts/cscope.vim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'ojroques/nvim-lspfuzzy'
+
+" dart
+Plug 'dart-lang/dart-vim-plugin'
 call plug#end()
 
 set noerrorbells
@@ -158,20 +161,40 @@ require('lspfuzzy').setup {}
 require'lspconfig'.clangd.setup {
 
     on_attach = function (client, buffnr)
-        print ("skm: clangd started....", buffnr );
+        print ("clangd ....", buffnr );
         vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
         vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
         vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
         vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
     end
 }
-require'lspconfig'.gopls.setup{
+
+require'lspconfig'.gopls.setup {
     on_attach = function (client, buffnr)
-        print ("skm: gopls started....", buffnr );
+        print ("gopls ....", buffnr );
         vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
         vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
         vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
         vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
     end
+}
+
+require'lspconfig'.dartls.setup {
+    on_attach = function (client, buffnr)
+        print ("dartls ....", buffnr );
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
+        vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
+    end
+
+    --  init_options = {
+    --      closingLabels = fale,
+    --      flutterOutline = true,
+    --      onlyAnalyzeProjectsWithOpenFiles = false,
+    --      outline = false,
+    --      suggestFromUnimportedLibraries = true
+    --  };
+    --  root_dir = root_pattern("pubspec.yaml")
 }
 EOF
