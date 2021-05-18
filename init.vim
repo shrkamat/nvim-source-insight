@@ -198,3 +198,18 @@ require'lspconfig'.dartls.setup {
     --  root_dir = root_pattern("pubspec.yaml")
 }
 EOF
+
+" i changes mode to TERMINAL mode
+" on esc exit terminal mode & buffer delete
+augroup run
+    autocmd!
+    autocmd filetype cpp  nnoremap <f5> :w <bar> !g++ -g -O0 % <cr> :vnew <bar> :te ./a.out < inp.txt <cr> i
+    autocmd filetype dart nnoremap <f5> :w <bar> :vnew <bar> :te dart run <cr> i
+
+    " SK: don't rely on this for autocmd
+    autocmd filetype vim  nnoremap <f5> :w <bar> :so % <cr>
+augroup END
+
+" terminal mode
+:tnoremap <Esc> <C-\><C-n><CR> :bd!<CR>
+
