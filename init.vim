@@ -9,13 +9,35 @@ Plug 'tpope/vim-sensible'
 Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/cscope.vim'
+Plug 'jiangmiao/auto-pairs'
 
+" lsp
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'ojroques/nvim-lspfuzzy'
+Plug 'nvim-lua/lsp-status.nvim'
 
-" dart
+" dart / flutter
 Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+
+" snippets
+Plug 'rafamadriz/friendly-snippets'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'Neevash/awesome-flutter-snippets'
+
+" meson
+Plug 'stfl/meson.vim'
+
+" telescope
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" debug
+Plug 'mfussenegger/nvim-dap'
+Plug 'theHamsta/nvim-dap-virtual-text'
 call plug#end()
 
 set noerrorbells
@@ -130,7 +152,7 @@ let g:compe = {}
 let g:compe.enabled = v:true
 let g:compe.autocomplete = v:true
 let g:compe.debug = v:false
-let g:compe.min_length = 3
+let g:compe.min_length = 2
 let g:compe.preselect = 'enable'
 let g:compe.throttle_time = 80
 let g:compe.source_timeout = 200
@@ -148,24 +170,69 @@ let g:compe.source.nvim_lsp = v:true
 let g:compe.source.nvim_lua = v:true
 let g:compe.source.vsnip = v:true
 
+set completeopt=menuone,noselect
+
 inoremap <silent><expr> <C-Space> compe#complete()
 inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
+" telescope customizations
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
 " lsp customizations
 
 lua << EOF
-require('lspfuzzy').setup {}
-require'lspconfig'.clangd.setup {
 
+local dap = require('dap')
+dap.adapters.node2 = {
+  type = 'executable',
+  command = 'node',
+  -- args = {os.getenv('HOME') .. '/apps/vscode-node-debug2/out/src/nodeDebug.js'},
+  args = {'/home/skamath/proactive/js/vscode-node-debug2/out/src/nodeDebug.js'},
+}
+
+require('lspfuzzy').setup {}
+
+local on_attach_common = function(client, buffnr)
+    local opts = { noremap=true, silent=true };
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '=',            '<Cmd>lua vim.lsp.buf.definition()<CR>', opts);
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '?',            '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts);
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '<F1>',         '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts);
+    vim.api.nvim_buf_set_keymap(buffnr,'n', 'K',            '<cmd>lua vim.lsp.buf.hover()<CR>', opts);
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>wl',    '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>rn',    '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>ca',    '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e',     '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts);
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '',           '<cmd>lua vim.lsp.buf.references()<CR>', opts);
+end
+
+local lsp_status = require('lsp-status')
+lsp_status.register_progress()
+
+  lsp_status.config({
+    indicator_errors = 'E',
+    indicator_warnings = 'W',
+    indicator_info = 'i',
+    indicator_hint = '?',
+    indicator_ok = 'Ok',
+  });
+
+require'lspconfig'.clangd.setup {
+    handlers = lsp_status.extensions.clangd.setup(),
+    init_options = {
+        clangdFileStatus = true
+    },
+    capabilities = lsp_status.capabilities,
     on_attach = function (client, buffnr)
-        print ("clangd ....", buffnr );
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
+        print ("clangd ....", buffnr);
+        lsp_status.extensions.clangd.setup();
+        lsp_status.on_attach(client);
+        on_attach_common(client, buffnr);
     end
 }
 
@@ -182,10 +249,7 @@ require'lspconfig'.gopls.setup {
 require'lspconfig'.dartls.setup {
     on_attach = function (client, buffnr)
         print ("dartls ....", buffnr );
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
+        on_attach_common(client, buffnr);
     end
 
     --  init_options = {
@@ -197,7 +261,33 @@ require'lspconfig'.dartls.setup {
     --  };
     --  root_dir = root_pattern("pubspec.yaml")
 }
+
+require'lspconfig'.tsserver.setup {
+    handlers = lsp_status.extensions.clangd.setup(),
+    init_options = {
+        clangdFileStatus = true
+    },
+    capabilities = lsp_status.capabilities,
+    on_attach = function (client, buffnr)
+        print ("ts/js ....", buffnr);
+        lsp_status.on_attach(client);
+        on_attach_common(client, buffnr);
+    end
+}
+
 EOF
+
+" LspStatus
+function! LspStatusLine() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+
+  return ''
+endfunction
+
+set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+set statusline+=%{LspStatusLine()}
 
 " i changes mode to TERMINAL mode
 " on esc exit terminal mode & buffer delete
