@@ -38,6 +38,12 @@ Plug 'nvim-telescope/telescope.nvim'
 " debug
 Plug 'mfussenegger/nvim-dap'
 Plug 'theHamsta/nvim-dap-virtual-text'
+
+" Github MD previewer
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
+" Highlight in different colors
+Plug 'joanrivera/vim-highlight'
 call plug#end()
 
 set noerrorbells
@@ -184,6 +190,9 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+" utils
+imap <F2> <CTRL-R>=strftime('%F')<C-M>
+
 " lsp customizations
 
 lua << EOF
@@ -270,6 +279,15 @@ require'lspconfig'.tsserver.setup {
     capabilities = lsp_status.capabilities,
     on_attach = function (client, buffnr)
         print ("ts/js ....", buffnr);
+        lsp_status.on_attach(client);
+        on_attach_common(client, buffnr);
+    end
+}
+
+require'lspconfig'.rls.setup {
+    capabilities = lsp_status.capabilities,
+    on_attach = function (client, buffnr)
+        print ("rls ....", buffnr);
         lsp_status.on_attach(client);
         on_attach_common(client, buffnr);
     end
