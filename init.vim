@@ -8,7 +8,37 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
 Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
+Plug 'vim-scripts/cscope.vim'
+Plug 'jiangmiao/auto-pairs'
+
+" lsp
 Plug 'hrsh7th/nvim-compe'
+Plug 'ojroques/nvim-lspfuzzy'
+
+
+" snippets
+Plug 'rafamadriz/friendly-snippets'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+
+" meson
+Plug 'stfl/meson.vim'
+
+" telescope
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" utils
+" Highlight in different colors
+" Plug 'joanrivera/vim-highlight'
+Plug 'shrkamat/vim-highlight'
+
+" Code commenting
+Plug 'preservim/nerdcommenter'
+
+" my own
+Plug 'shrkamat/vim-log-syntax'
 call plug#end()
 
 set noerrorbells
@@ -32,6 +62,9 @@ set signcolumn=yes
 set cmdheight=2
 
 set updatetime=50
+
+syntax enable
+filetype plugin indent on
 
 colorscheme gruvbox
 
@@ -117,14 +150,15 @@ nnoremap <silent> <Leader><Leader>ct :call CscopeQuery('9')<CR>
 " startify customizations
 let g:startify_change_to_dir=0
 
-" compe customizations
+
+" nvim-compe customizations
 set completeopt=menuone,noselect
 
 let g:compe = {}
 let g:compe.enabled = v:true
 let g:compe.autocomplete = v:true
 let g:compe.debug = v:false
-let g:compe.min_length = 3
+let g:compe.min_length = 2
 let g:compe.preselect = 'enable'
 let g:compe.throttle_time = 80
 let g:compe.source_timeout = 200
@@ -147,3 +181,19 @@ inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+" telescope customizations
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" SK: For easy navigation
+" '+' takes you to definition
+" '-' brings you back
+nnoremap <silent> = :call Cscope('1', expand('<cword>'))<CR>
+nnoremap <silent> - <C-o>
+
+" terminal mode
+:tnoremap <Esc> <C-\><C-n><CR> :bd!<CR>
+
