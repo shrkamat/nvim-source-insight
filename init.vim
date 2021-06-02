@@ -16,10 +16,16 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'ojroques/nvim-lspfuzzy'
 Plug 'nvim-lua/lsp-status.nvim'
+Plug 'nvim-lua/lsp_extensions.nvim'
+
 
 " dart / flutter
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
+
+" rust
+" Plug 'rust-lang/rust.vim'
+
 
 " snippets
 Plug 'rafamadriz/friendly-snippets'
@@ -42,8 +48,16 @@ Plug 'theHamsta/nvim-dap-virtual-text'
 " Github MD previewer
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
+" utils
 " Highlight in different colors
-Plug 'joanrivera/vim-highlight'
+" Plug 'joanrivera/vim-highlight'
+Plug 'shrkamat/vim-highlight'
+
+" Code commenting
+Plug 'preservim/nerdcommenter'
+
+" my own
+Plug 'shrkamat/vim-log-syntax'
 call plug#end()
 
 set noerrorbells
@@ -67,6 +81,9 @@ set signcolumn=yes
 set cmdheight=2
 
 set updatetime=50
+
+syntax enable
+filetype plugin indent on
 
 colorscheme gruvbox
 
@@ -190,8 +207,15 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+" rust customizations
+let g:rustfmt_autosave = 1
+
 " utils
 imap <F2> <CTRL-R>=strftime('%F')<C-M>
+
+
+nnoremap - <C-o>
+
 
 " lsp customizations
 
@@ -284,11 +308,9 @@ require'lspconfig'.tsserver.setup {
     end
 }
 
-require'lspconfig'.rls.setup {
-    capabilities = lsp_status.capabilities,
+require'lspconfig'.rust_analyzer.setup {
     on_attach = function (client, buffnr)
-        print ("rls ....", buffnr);
-        lsp_status.on_attach(client);
+        print ("rust-analyzer .. ..", buffnr);
         on_attach_common(client, buffnr);
     end
 }
@@ -316,6 +338,7 @@ augroup run
 
     " SK: don't rely on this for autocmd
     autocmd filetype vim  nnoremap <f5> :w <bar> :so % <cr>
+    autocmd filetype rust  nnoremap <f5> :! cargo run<cr>
 augroup END
 
 " terminal mode
