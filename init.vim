@@ -2,6 +2,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'yuki-yano/fzf-preview.vim'
+Plug 'sharkdp/bat'
 " Plug 'zackhsi/fzf-tags'
 Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-fugitive'
@@ -10,6 +12,9 @@ Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/cscope.vim'
 Plug 'jiangmiao/auto-pairs'
+
+" syntax highlighting
+Plug 'sheerun/vim-polyglot'
 
 " lsp
 Plug 'neovim/nvim-lspconfig'
@@ -47,17 +52,22 @@ Plug 'theHamsta/nvim-dap-virtual-text'
 
 " Github MD previewer
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'tyru/open-browser.vim'
+Plug 'aklt/plantuml-syntax'
 
 " utils
 " Highlight in different colors
 " Plug 'joanrivera/vim-highlight'
-Plug 'shrkamat/vim-highlight'
+Plug 'shrkamat/vim-highlight'           " fork - new coonad HighlightCustom
+Plug 'shrkamat/vim-log-syntax'          " fork - for log analysis
+Plug 'RRethy/vim-illuminate'
+Plug 'machakann/vim-highlightedyank'
 
 " Code commenting
 Plug 'preservim/nerdcommenter'
 
-" my own
-Plug 'shrkamat/vim-log-syntax'
+
 call plug#end()
 
 set noerrorbells
@@ -86,6 +96,7 @@ syntax enable
 filetype plugin indent on
 
 colorscheme gruvbox
+set cursorline          " set this after colorscheme
 
 let mapleader = " "
 
@@ -272,10 +283,7 @@ require'lspconfig'.clangd.setup {
 require'lspconfig'.gopls.setup {
     on_attach = function (client, buffnr)
         print ("gopls ....", buffnr );
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '=',        '<Cmd>lua vim.lsp.buf.definition()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '<C-k>',    '<cmd>lua vim.lsp.buf.signature_help()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',{noremap = true, silent = true});
-        vim.api.nvim_buf_set_keymap(buffnr,'n', '',       '<cmd>lua vim.lsp.buf.references()<CR>',{noremap = true, silent = true});
+        on_attach_common(client, buffnr);
     end
 }
 
@@ -335,12 +343,19 @@ augroup run
     autocmd!
     autocmd filetype cpp  nnoremap <f5> :w <bar> !g++ -g -O0 % <cr> :vnew <bar> :te ./a.out < inp.txt <cr> i
     autocmd filetype dart nnoremap <f5> :w <bar> :vnew <bar> :te dart run <cr> i
+    autocmd filetype rust  nnoremap <f5> :! cargo run<cr>
+    autocmd filetype javascript  nnoremap <f5> :! node run<cr>
+
+    autocmd filetype qml nnoremap '.' :! ls <CR>
 
     " SK: don't rely on this for autocmd
     autocmd filetype vim  nnoremap <f5> :w <bar> :so % <cr>
-    autocmd filetype rust  nnoremap <f5> :! cargo run<cr>
 augroup END
 
 " terminal mode
 :tnoremap <Esc> <C-\><C-n><CR> :bd!<CR>
+
+
+" SKM Group this later
+nnoremap <C-A> ggVG
 
