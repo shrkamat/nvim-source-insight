@@ -182,6 +182,8 @@ let g:startify_change_to_dir=0
 
 
 " nvim-compe customizations
+set completeopt=menuone,noselect
+
 let g:compe = {}
 let g:compe.enabled = v:true
 let g:compe.autocomplete = v:true
@@ -204,8 +206,6 @@ let g:compe.source.nvim_lsp = v:true
 let g:compe.source.nvim_lua = v:true
 let g:compe.source.vsnip = v:true
 
-set completeopt=menuone,noselect
-
 inoremap <silent><expr> <C-Space> compe#complete()
 inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
@@ -221,11 +221,11 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " rust customizations
 let g:rustfmt_autosave = 1
 
-" utils
-imap <F2> <CTRL-R>=strftime('%F')<C-M>
-
-
-nnoremap - <C-o>
+" SK: For easy navigation
+" '+' takes you to definition
+" '-' brings you back
+nnoremap <silent> = :call Cscope('1', expand('<cword>'))<CR>
+nnoremap <silent> - <C-o>
 
 
 " lsp customizations
@@ -352,7 +352,7 @@ augroup run
     autocmd filetype vim  nnoremap <f5> :w <bar> :so % <cr>
 augroup END
 
-" terminal mode
+" exit terminal mode with ESC
 :tnoremap <Esc> <C-\><C-n><CR> :bd!<CR>
 
 
