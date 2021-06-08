@@ -2,6 +2,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'yuki-yano/fzf-preview.vim'
+Plug 'sharkdp/bat'
 " Plug 'zackhsi/fzf-tags'
 Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-fugitive'
@@ -10,6 +12,9 @@ Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/cscope.vim'
 Plug 'jiangmiao/auto-pairs'
+
+" syntax highlighting
+Plug 'sheerun/vim-polyglot'
 
 " lsp
 Plug 'hrsh7th/nvim-compe'
@@ -32,13 +37,15 @@ Plug 'nvim-telescope/telescope.nvim'
 " utils
 " Highlight in different colors
 " Plug 'joanrivera/vim-highlight'
-Plug 'shrkamat/vim-highlight'
+Plug 'shrkamat/vim-highlight'           " fork - new coonad HighlightCustom
+Plug 'shrkamat/vim-log-syntax'          " fork - for log analysis
+Plug 'RRethy/vim-illuminate'
+Plug 'machakann/vim-highlightedyank'
 
 " Code commenting
 Plug 'preservim/nerdcommenter'
 
-" my own
-Plug 'shrkamat/vim-log-syntax'
+
 call plug#end()
 
 set noerrorbells
@@ -67,6 +74,7 @@ syntax enable
 filetype plugin indent on
 
 colorscheme gruvbox
+set cursorline          " set this after colorscheme
 
 let mapleader = " "
 
@@ -194,6 +202,10 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <silent> = :call Cscope('1', expand('<cword>'))<CR>
 nnoremap <silent> - <C-o>
 
-" terminal mode
+" exit terminal mode with ESC
 :tnoremap <Esc> <C-\><C-n><CR> :bd!<CR>
+
+
+" SKM Group this later
+nnoremap <C-A> ggVG
 
