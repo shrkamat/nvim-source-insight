@@ -195,6 +195,9 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap * *N
+nnoremap <leader>gg *N <cmd>Telescope grep_string<CR>
+nnoremap <f9> <cmd>Telescope live_grep<cr>
 
 " SK: For easy navigation
 " '+' takes you to definition
