@@ -217,6 +217,9 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap * *N
+nnoremap <leader>gg *N <cmd>Telescope grep_string<CR>
+nnoremap <f9> <cmd>Telescope live_grep<cr>
 
 " rust customizations
 let g:rustfmt_autosave = 1
@@ -252,7 +255,7 @@ local on_attach_common = function(client, buffnr)
     vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>rn',    '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>ca',    '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(buffnr,'n', '<space>e',     '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts);
-    vim.api.nvim_buf_set_keymap(buffnr,'n', '',           '<cmd>lua vim.lsp.buf.references()<CR>', opts);
+    vim.api.nvim_buf_set_keymap(buffnr,'n', '',           '*N <cmd>lua vim.lsp.buf.references()<CR>', opts);
 end
 
 local lsp_status = require('lsp-status')
