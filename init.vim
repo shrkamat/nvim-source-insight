@@ -277,7 +277,11 @@ require'lspconfig'.clangd.setup {
         lsp_status.extensions.clangd.setup();
         lsp_status.on_attach(client);
         on_attach_common(client, buffnr);
-    end
+    end,
+    --- use when debugging lsp
+    --- cmd = {"/ws/skamath/proactive/toolchain/tc-build/build/llvm/stage1/bin/clangd",  "--log=verbose", "--background-index"},
+    --- without root_dir compile_commands.json was not being picked up
+    root_dir = require'lspconfig'.util.root_pattern("compile_commands.json") or dirname
 }
 
 require'lspconfig'.gopls.setup {
