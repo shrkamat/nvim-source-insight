@@ -67,7 +67,6 @@ Plug 'machakann/vim-highlightedyank'
 " Code commenting
 Plug 'preservim/nerdcommenter'
 
-
 call plug#end()
 
 set noerrorbells
@@ -353,7 +352,7 @@ augroup run
     autocmd filetype rust  nnoremap <f5> :! cargo run<cr>
     autocmd filetype javascript  nnoremap <f5> :! node run<cr>
 
-    autocmd filetype qml nnoremap '.' :! ls <CR>
+    autocmd filetype qml nnoremap <f5> :w <bar> :! /home/skamath/Qt5.4.2/5.4/gcc_64/bin/qmlscene % <CR>
 
     " SK: don't rely on this for autocmd
     autocmd filetype vim  nnoremap <f5> :w <bar> :so % <cr>
@@ -365,4 +364,16 @@ augroup END
 
 " SKM Group this later
 nnoremap <C-A> ggVG
+nnoremap <silent> <leader>g :Telescope grep_string <CR>
+vnoremap <silent> <leader>g :Telescope grep_string <CR>
 
+" FOLDS: https://www.youtube.com/watch?v=oqYQ7IeDs0E
+" Add experimental stuffs here and then formalize
+set foldmethod=syntax
+" zM => folds to max
+" zm => increase fold level by one
+" zr => decrease fold level by one
+" zR => unfolds to max (same as original document)
+" zo => opens fold under cursor
+" zc => closes a fold under cursor
+" TODO: how to recursively open up a fold and close a fold
