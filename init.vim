@@ -8,6 +8,7 @@ Plug 'sharkdp/bat'
 Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-obsession'
 Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/cscope.vim'
@@ -76,6 +77,7 @@ set shiftwidth=4
 set expandtab
 set smartindent
 set nowrap
+set clipboard=unnamedplus
 
 set noswapfile
 set nobackup
@@ -103,6 +105,9 @@ let mapleader = " "
 nnoremap <silent> <F7> :Tags<CR>
 nnoremap <silent> <F8> :BTags<CR>
 nnoremap <silent> <leader>o :Files<CR>
+
+" ls commad lists buffers, <leader> ls lists buffers in FZF
+nnoremap <silent> <leader>ls :Buffers<CR>
 
 " FZF cscope handling
 function! Cscope(option, query)
@@ -377,3 +382,24 @@ set foldmethod=syntax
 " zo => opens fold under cursor
 " zc => closes a fold under cursor
 " TODO: how to recursively open up a fold and close a fold
+
+" Tab to switch VimTabs
+nnoremap <silent> <Tab> gt
+nnoremap <silent> <S-Tab> gT
+
+" save on CTRL-S
+noremap  <silent> <C-S>          :update<CR>
+
+" I don't understand below commands, what is <C-C> & <C-O> ?
+vnoremap <silent> <C-S>         <C-C>:update<CR>
+inoremap <silent> <C-S>         <C-O>:update<CR>
+
+
+" Clearing whitespace
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+command! TrimWhitespace call TrimWhitespace()
+
