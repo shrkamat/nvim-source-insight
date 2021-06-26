@@ -5,7 +5,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'yuki-yano/fzf-preview.vim'
 Plug 'sharkdp/bat'
 " Plug 'zackhsi/fzf-tags'
-Plug 'gruvbox-community/gruvbox'
+Plug 'sainnhe/gruvbox-material'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-sensible'
@@ -61,10 +61,11 @@ Plug 'aklt/plantuml-syntax'
 " utils
 " Highlight in different colors
 " Plug 'joanrivera/vim-highlight'
-Plug 'shrkamat/vim-highlight'           " fork - new coonad HighlightCustom
+Plug 'shrkamat/vim-highlight'           " fork - new command HighlightCustom
 Plug 'shrkamat/vim-log-syntax'          " fork - for log analysis
 Plug 'RRethy/vim-illuminate'
 Plug 'machakann/vim-highlightedyank'
+Plug 'gennaro-tedesco/nvim-peekup'
 
 " Code commenting
 Plug 'preservim/nerdcommenter'
@@ -97,7 +98,8 @@ set updatetime=50
 syntax enable
 filetype plugin indent on
 
-colorscheme gruvbox
+colorscheme gruvbox-material
+set background=dark
 set cursorline          " set this after colorscheme
 
 let mapleader = " "
@@ -376,6 +378,7 @@ vnoremap <silent> <leader>g :Telescope grep_string <CR>
 " FOLDS: https://www.youtube.com/watch?v=oqYQ7IeDs0E
 " Add experimental stuffs here and then formalize
 set foldmethod=syntax
+set foldlevel=99
 " zM => folds to max
 " zm => increase fold level by one
 " zr => decrease fold level by one
@@ -403,4 +406,7 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 command! TrimWhitespace call TrimWhitespace()
+
+let g:peekup_paste_before = '<leader>P'
+let g:peekup_paste_after = '<leader>p'
 
