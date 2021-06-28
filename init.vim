@@ -17,6 +17,8 @@ Plug 'jiangmiao/auto-pairs'
 
 " syntax highlighting
 Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/playground'
 
 " lsp
 Plug 'neovim/nvim-lspconfig'
@@ -335,6 +337,21 @@ require'lspconfig'.rust_analyzer.setup {
         print ("rust-analyzer .. ..", buffnr);
         on_attach_common(client, buffnr);
     end
+}
+
+-- TODO
+-- require "nvim-treesitter.configs".setup {
+--    playground = {
+--        enable = true,
+--        disable = {}
+--    }
+-- }
+
+require('telescope').setup {
+    defaults = {
+        prompt_position = 'top',
+        sorting_strategy = 'ascending'
+    }
 }
 
 EOF
