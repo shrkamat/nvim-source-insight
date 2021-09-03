@@ -2,7 +2,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'yuki-yano/fzf-preview.vim'
+" Plug 'yuki-yano/fzf-preview.vim'
 Plug 'sharkdp/bat'
 " Plug 'zackhsi/fzf-tags'
 Plug 'sainnhe/gruvbox-material'
@@ -10,7 +10,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-obsession'
-Plug 'pbogut/fzf-mru.vim'
+" Plug 'pbogut/fzf-mru.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/cscope.vim'
 Plug 'jiangmiao/auto-pairs'
@@ -349,7 +349,9 @@ require'lspconfig'.rust_analyzer.setup {
 
 require('telescope').setup {
     defaults = {
-        prompt_position = 'top',
+        layout_config = {
+            prompt_position = 'top'
+        },
         sorting_strategy = 'ascending'
     }
 }
