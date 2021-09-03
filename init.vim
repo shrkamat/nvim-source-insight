@@ -102,7 +102,7 @@ filetype plugin indent on
 
 colorscheme gruvbox-material
 set background=dark
-set cursorline          " set this after colorscheme
+" set cursorline          " set this after colorscheme
 
 let mapleader = " "
 
@@ -189,6 +189,8 @@ nnoremap <silent> <Leader><Leader>ct :call CscopeQuery('9')<CR>
 " startify customizations
 let g:startify_change_to_dir=0
 
+" vim-illuminate customizations
+let g:Illuminate_delay = 1000
 
 " nvim-compe customizations
 set completeopt=menuone,noselect
