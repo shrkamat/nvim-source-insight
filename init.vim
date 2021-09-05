@@ -65,7 +65,7 @@ Plug 'aklt/plantuml-syntax'
 " Plug 'joanrivera/vim-highlight'
 Plug 'shrkamat/vim-highlight'           " fork - new command HighlightCustom
 Plug 'shrkamat/vim-log-syntax'          " fork - for log analysis
-Plug 'RRethy/vim-illuminate'
+" Plug 'RRethy/vim-illuminate'
 Plug 'machakann/vim-highlightedyank'
 Plug 'gennaro-tedesco/nvim-peekup'
 
@@ -81,7 +81,7 @@ set shiftwidth=4
 set expandtab
 set smartindent
 set nowrap
-set clipboard=unnamedplus
+set clipboard^=unnamed,unnamedplus
 
 set noswapfile
 set nobackup
